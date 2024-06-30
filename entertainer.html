@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entertainer</title>
+  <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
+  <style>
+   
+    p {
+        font-size: 40px;
+        font-family: comic;
+    }
+    h1 {
+        font-family: simp;
+    }
+     @font-face {
+            font-family: Simp;
+            src: url(simpson.otf);
+        }
+        @font-face {
+            font-family: comic;
+            src: url(comic.otf);
+        }
+        @keyframes colorChange {
+            0% { color: #FFD700; }
+            25% { color: #FF6B00; }
+            50% { color: #0038A8; }
+            75% { color: #FF0000; }
+            100% { color: #00BFFF; }
+        }
+        #points {
+            font-family: Simp;
+            animation: colorChange 2s linear infinite;
+            font-size: 30px;
+        }
+    body {
+      text-align: center;
+        color: #FAF0CA;
+      background-color: #F95738;
+    }
+
+    #game-info {
+      margin-top: 20px;
+      display: none;
+    }
+
+    #random-sequence {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 10px;
+      font-family: simp;
+    }
+
+    #score {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Entertain the people in the right order!</h1>
+  <p>Press the keys in the given sequence: W(ave), A(ct), S(ing), D(ance)</p>
+  <p id="points">300</p>
+  <p id="game-info">Time left: <span id="time-left">2</span>s | Click Count: <span id="click-count">1</span></p>
+  <div id="random-sequence"></div>
+  <p id="score"></p>
+
+  <script>
+
+    var pointsElement = document.getElementById('points');
+        var baseLevelElement = document.getElementById('basepoints');
+        var points = parseInt(pointsElement.textContent);
+
+        function loadPoints() {
+            const savedPoints = localStorage.getItem('points1');
+            if (savedPoints) {
+                pointsElement.innerText = savedPoints;
+                points = parseInt(savedPoints);
+            }
+        }
+
+        loadPoints();
+
+
+    let clickCount = 1; // Start count at 1
+    let timeLeft = 2;
+    let timer;
+    let sequence = [];
+    let gameStarted = false;
+    let currentIndex = 0;
+
+    function startGame() {
+      resetGame();
+      updateGameInfo();
+      startTimer();
+      generateRandomSequence();
+    }
+
+    function resetGame() {
+      clickCount = 1;
+      timeLeft = 2;
+      sequence = [];
+      currentIndex = 0;
+      gameStarted = false;
+      clearInterval(timer);
+      document.getElementById('random-sequence').textContent = '';
+      document.getElementById('score').textContent = '';
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        timeLeft--;
+
+        if (timeLeft <= 0) {
+          endGame();
+        } else {
+          updateGameInfo();
+        }
+      }, 1000);
+    }
+
+    function updateGameInfo() {
+      document.getElementById('time-left').textContent = timeLeft;
+      document.getElementById('click-count').textContent = clickCount;
+    }
+
+    function generateRandomSequence() {
+      const validKeys = ['W', 'A', 'S', 'D'];
+      sequence = [];
+
+      for (let i = 0; i < 4; i++) {
+        const randomKey = validKeys[Math.floor(Math.random() * validKeys.length)];
+        sequence.push(randomKey);
+      }
+
+      // Display the random sequence
+      document.getElementById('random-sequence').textContent = sequence.join(' ');
+      gameStarted = true;
+    }
+
+    document.addEventListener('keydown', function handleKeyPress(event) {
+      if (!gameStarted) return;
+
+      const pressedKey = event.key.toUpperCase();
+
+      if (pressedKey === sequence[currentIndex]) {
+        currentIndex++;
+
+        if (currentIndex === sequence.length) {
+          clickCount++;
+          endGame();
+        }
+      } else {
+        endGame();
+      }
+
+      updateGameInfo();
+    });
+
+    function endGame() {
+      gameStarted = false;
+      clearInterval(timer);
+      document.getElementById('score').textContent = 'Game Over! Your final score is ' + clickCount;
+
+      switch (clickCount) {
+        case 1:
+          
+          break;
+
+        case 2:
+          points += 500;
+          break;
+      }
+      points += 1500;
+      pointsElement.innerText = points;
+            localStorage.setItem('points1', points);
+
+      setTimeout(() => {
+        window.location.href = 'work.html';
+      }, 4000);
+    }
+
+    setTimeout(startGame, 2000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<html>
+    <head>
+        <title>DonutOS</title>
+        <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
+    </head>
+    <body>
+        <button type="buttonvs" class="buttonvs" id="button"><i class="fas fa-bars"></i>
+            <img src="https://lh3.googleusercontent.com/ZwetL2M2Av7VJNt9RwKXCRumRY7rzqqccfO96HRR9_CE3YiDlRJXFYNa6RrUWfsGXeuebeKK0t_PR3VuBxsN9WdHe1-V-hTBrgvHphxFDSFiBCklm4QB3T0Qxist416oVr8ol7IExQ=w2400" height="85px" width="85px"/>
+            <p style="color: white;">Chat</p> 
+            </button>
+            <div id="Duekin" class="Duekin">
+                <div>
+                    <button id="D">Duekin</button>
+                    <button id="due">Close</button>
+                    <button id="kin">Enlarge</button>
+                </div>
+    </body>
+    <style>
+        .Duekin {
+    position: absolute;
+    z-index: 9;
+    background-color:darkgrey;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+    display: none;
+}
+        body {
+    background-repeat: no-repeat;
+    background-size: cover;   
+    height: 100%;
+    width: 100%; 
+    background-image: url(https://lh3.googleusercontent.com/rIawat0TWKEfJo7r4ZerZ-1pzZwEB6FYiJ9rHBWiBlHdpSZ_SUR9PUhr3GFCbrvY-3LGoNH4NAC_GUqKLlZaZtUjuf1de8b8tqL5QgNAhV0zOf78BKp1Ew2TUFeMgoXWrDR3Zz4J3w=w2400);
+    margin: 0;
+    
+}
+.buttonvs {
+    height: 60px;
+    width: 60px;
+    outline: none;
+    position:absolute;
+    padding: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+   
+    font-size: 1.4em;
+    background-color: transparent;
+}
+    </style>
+    <script>
+        dragElement(document.getElementById("button"));
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV:
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+var settings = document.getElementById("button");
+settings.ondblclick =()=> {
+  document.getElementById("Duekin").style.display = 'block';
+  var frame = document.createElement("iframe");
+  frame.src = "https://21243f5f-df57-4156-ae4f-bca39b40417d-00-3ot3spp6lpew6.spock.replit.dev/"
+  frame.style.width = "750px";
+  frame.style.height = "500px";
+  var button = document.createElement('button');
+    button.type = 'button';
+    button.innerHTML = 'Press me';
+    button.className = 'btn-styled';
+
+    var due = document.getElementById('due');
+    due.onclick =()=> {
+    frame.remove();
+    document.getElementById('Duekin').style.display = 'none';
+
+}
+
+var enlarge = document.getElementById('kin');
+kin.onclick =()=> {
+  //fix this some time later I am losing my poopoo
+  frame.style.width = "1500px";
+  frame.style.height = "700px";
+
+}
+   
+  document.getElementById("Duekin").appendChild(frame);
+
+  
+  
+  
+}
+
+
+dragElement(document.getElementById("Duekin"));
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV:
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+
+function checkMemberStatus() {
+    
+    if (!localStorage.getItem('donutOScheck')) {
+      
+        window.location.href = 'map.html';
+    }
+}
+
+
+window.onload = function() {
+    checkMemberStatus();
+};
+    </script>
+</html>

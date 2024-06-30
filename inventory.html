@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <title>Inventory</title>
+        <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
+    </head>
+    
+    <body>
+        <h1>Inventory</h1>
+        <div class="item" id="donut">
+            <img style="width: 50%;" src="donut .gif">
+            <p>Donut</p>
+          
+        </div>
+        <div class="item" id="sodabob">
+            <img style="width: 50%;" src="sodabob.gif">
+            <p>Soda Bob</p>
+     
+        </div>
+        <div class="item" id="prismheart">
+            <img style="width: 50%;" src="hp.gif">
+            <p>Prism Heart</p>
+          
+        </div>
+        <div class="item" id="Bagel">
+            <img style="width: 50%;" src="bagel.png">
+            <p>Bagel</p>  
+        </div>
+        <div class="item" id="goldengloves">
+            <img style="width: 50%;" src="TEMPgloves2.png">
+            <p>Golden Gloves</p>
+        </div>
+    </body>
+    <style>
+        #Bagel {
+            display: none;
+        }
+        #prismheart {
+            display: none;
+        }
+        #sodabob {
+            display: none;
+        }
+        #donut {
+            display: none;
+        }
+      .item {
+        width: 500px;
+        height: 500px;
+      }
+        p {
+            font-family: comic;
+            font-size: 30px;
+        }
+      h1 {
+        font-family: simp;
+        text-align: center;
+      }
+         @font-face {
+        font-family: Simp;
+        src: url(simpson.otf);
+    }
+    @font-face {
+        font-family: comic;
+        src: url(comic.otf);
+    }
+        body {
+            color: #E6F8B2;
+            background-color: #F88379;
+        }
+    </style>
+   <script>
+    if (localStorage.getItem('sodabobcheck')){
+        document.getElementById('sodabob').style.display = 'block';
+    }
+    if (localStorage.getItem('donutcheck')){
+        document.getElementById('donut').style.display = 'block';
+    }
+    if (localStorage.getItem('heartcheck')){
+        document.getElementById('prismheart').style.display = 'block';
+    }
+    if (localStorage.getItem('BagelTrinketCheck')){
+        document.getElementById('Bagel').style.display = 'block';
+    }
+    document.addEventListener('keydown', function(event) {
+    if (event.key === 'H' || event.key === 'h') {
+        window.location.href = 'map.html';
+    }
+});
+   </script>
+</html>

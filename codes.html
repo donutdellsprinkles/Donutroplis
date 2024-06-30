@@ -1,0 +1,141 @@
+<html>
+    <head>
+        <title>Codes</title>
+        <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
+    </head>
+    <body>
+        <button id="back" onclick="window.location.href='map.html';">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+        </button>
+        <!--This will be the area for inputting codes and whatever to get sprinkles and all that ya feel me-->
+            <h1 style="text-align: center; font-family: simp;">Donutroplis Codes Area</h1>
+            <p>Input codes you find to get special rewards, or use codes for trading!</p>
+            <!--Create a new character in the shop who can give you codes and stuff to trade with him-->
+            <p>Sprinkles:</p>
+            <p id="points">300</p>
+            <input type="text" id="codeInput" placeholder="Enter Code">
+            <button id="applyButton">Apply Code</button>
+         
+    </body>
+    <style>
+         #back {
+        width: 30px;
+        height: 30px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        left: 0;
+        top: 0;
+     
+    }
+      #codeInput {
+        background-color:#FFD700;
+        color:#0038A8;
+        font-family: comic;
+        font-size: 30px;
+        font-weight: bolder;
+        border: none;
+        border-radius: 10px;
+        width: 800px;
+      }
+      #applyButton {
+        background-color: #00BFFF;
+        color:#FFD700;
+        font-family: comic;
+        font-size: 30px;
+        font-weight: bolder;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+           @font-face {
+    font-family: comic;
+    src: url(comic.otf)
+}
+  @font-face {
+    font-family: Simp;
+    src: url(simpson.otf)
+}
+          @keyframes colorChange {
+        0% { color: #FFD700; } /* Yellow */
+        25% { color: #FF6B00; } /* Orange */
+        50% { color: #0038A8; } /* Blue */
+        75% { color: #FF0000; } /* Red */
+        100% { color: #00BFFF; } /* Sky Blue */
+      }
+      #points {
+    font-family: Simp;
+    animation: colorChange 2s linear infinite;
+    font-size: 30px;
+  }
+
+  body {
+            background-color: #F88379;
+            font-family: comic;
+            font-size: 35px;
+             color: #F4F1BB;
+            
+        }
+    </style>
+    <script>
+        var codeInputElement = document.getElementById('codeInput');
+        var applyButton = document.getElementById('applyButton');
+    var pointsElement = document.getElementById('points');
+    var points = parseInt(pointsElement.textContent);
+    function loadPoints() {
+  const savedPoints = localStorage.getItem('points1');
+  if (savedPoints) {
+    pointsElement.innerText = savedPoints;
+    points = parseInt(savedPoints);
+  }
+}
+
+loadPoints();
+
+applyButton.addEventListener('click', function() {
+  var enteredCode = codeInputElement.value;
+  
+  // Check if the code has already been redeemed
+  if (localStorage.getItem('donut1') && enteredCode === "donut") {
+    alert('Code has already been redeemed.');
+    return;
+} 
+if (localStorage.getItem('lottery1') && enteredCode === "x0ow2sd9a7") {
+    alert('Code has already been redeemed.');
+    return;
+} 
+if (enteredCode.toLowerCase() === "donut") {
+    points = parseInt(pointsElement.innerText) + 300;
+    pointsElement.innerText = points;
+    localStorage.setItem('donut1', true);
+    alert('ok that was kinda obvious')
+} 
+if (enteredCode.toLowerCase() === "x0ow2sd9a7") {
+   
+       
+    if (Math.random() < 0.001) {
+            alert("YOOOOOOOOOOOOOOOOO YOU AN ALPHA-SIG-DONUTILLIONAIRE NOW YOOOOOOOOOOOOOO");
+            points = parseInt(pointsElement.innerText) + 2000000;
+            pointsElement.innerText = points;
+        }
+        else {
+            alert('things need to change brother')
+        }
+  
+    localStorage.setItem('lottery1', true);
+   
+} 
+else {
+    alert("Invalid code.");
+    return;
+}
+
+var points1 = pointsElement.innerText;
+localStorage.setItem('points1', points1);
+
+});
+
+
+    </script>
+</html>

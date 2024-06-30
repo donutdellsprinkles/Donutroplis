@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baking Minigame</title>
+    <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
+    <style>
+        p, h1 {
+           color: #E6EBE0;
+           font-weight: bold;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #EFE9AE;
+        }
+        #game {
+            text-align: center;
+            background: #FF928B;
+            padding: 20px;
+            border-radius: 10px;
+          
+        }
+        #button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #CDEAC0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #button:disabled {
+            background-color: #FFAC81;
+            cursor: not-allowed;
+        }
+        @font-face {
+            font-family: Simp;
+            src: url(simpson.otf);
+        }
+        @font-face {
+            font-family: comic;
+            src: url(comic.otf);
+        }
+        @keyframes colorChange {
+            0% { color: #FFD700; }
+            25% { color: #FF6B00; }
+            50% { color: #0038A8; }
+            75% { color: #FF0000; }
+            100% { color: #00BFFF; }
+        }
+        #points {
+            font-family: Simp;
+            animation: colorChange 2s linear infinite;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <h1>Remove from Oven on Time!</h1>
+        <p id="points">300</p>
+        <button id="button" disabled>Press Me</button>
+        <p id="message">Game will start soon...</p>
+        <p id="score"></p>
+    </div>
+
+    <script>
+
+var pointsElement = document.getElementById('points');
+        var baseLevelElement = document.getElementById('basepoints');
+        var points = parseInt(pointsElement.textContent);
+
+        function loadPoints() {
+            const savedPoints = localStorage.getItem('points1');
+            if (savedPoints) {
+                pointsElement.innerText = savedPoints;
+                points = parseInt(savedPoints);
+            }
+        }
+
+        loadPoints();
+
+        const button = document.getElementById('button');
+        const message = document.getElementById('message');
+        const scoreElement = document.getElementById('score');
+        let startTime;
+        let timer;
+        let gameEnded = false;
+
+        function startGame() {
+            message.textContent = "Get ready...";
+            button.disabled = true;
+            gameEnded = false;
+
+            setTimeout(() => {
+                message.textContent = "Go!";
+                button.disabled = false;
+                startTime = Date.now();
+
+                timer = setTimeout(() => {
+                    endGame();
+                }, 5000);
+            }, 2000);
+        }
+
+        function endGame() {
+            gameEnded = true;
+            button.disabled = true;
+            const elapsedTime = (Date.now() - startTime) / 1000;
+            let score = 0;
+
+            if (elapsedTime >= 5) {
+                message.textContent = "Time's up!";
+            } else if (Math.abs(elapsedTime - 5) < 0.1) {
+                score = 3;
+                points += 1800;
+                message.textContent = "Perfect timing!";
+            } else if (Math.abs(elapsedTime - 5) <= 2) {
+                score = 2;
+                points += 800;
+                message.textContent = "Good timing!";
+            } else {
+                message.textContent = "Too early or too late!";
+            }
+
+            scoreElement.textContent = `Your score: ${score}`;
+            points += 500;
+            pointsElement.innerText = points;
+            localStorage.setItem('points1', points);
+            setTimeout(backtowork, 4000); //go back home after 4 seconds
+        }
+
+        button.addEventListener('click', () => {
+            if (gameEnded) return;
+
+            clearTimeout(timer);
+            endGame();
+        });
+
+        startGame();
+        function backtowork() {
+            window.location.href = 'work.html';
+        }
+    </script>
+</body>
+</html>

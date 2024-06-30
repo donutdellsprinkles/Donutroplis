@@ -1,0 +1,619 @@
+<html>
+<head>
+    <title>Home</title>
+    <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
+</head>
+<body>
+    <p style="display: none;" id="energypoints">8</p>
+</body>
+<script type="module">
+    //Listen i know you are gonna read this code and just absolutely puke everywhere, I know. most important thing is it works, will fix it later dw
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js';
+ 
+    var scene, camera, renderer, cube, cube2, floor, bed, tree;
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    function init() {
+        scene = new THREE.Scene();
+        
+        // Use OrthographicCamera for an isometric view
+        const aspect = window.innerWidth / window.innerHeight;
+        const frustumSize = 1200;
+        camera = new THREE.OrthographicCamera(
+            frustumSize * aspect / -2, frustumSize * aspect / 2,
+            frustumSize / 2, frustumSize / -2,
+            0.1, 2000
+        );
+        camera.position.set(500, 500, 500); // Set the camera position to a corner
+        camera.lookAt(scene.position); // Look at the center of the scene
+
+        // Create a WebGLRenderer and turn on shadows in the renderer
+        renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x9FD3BF, 1);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        // Create a DirectionalLight and turn on shadows for the light
+        const light = new THREE.DirectionalLight(0xffffff, 3);
+        light.position.set(100, 200, 100); // light shining from top-right
+        light.castShadow = true;
+        light.shadow.bias = -0.02005; // Reducing shadow intensity by bias
+        scene.add(light);
+
+        // Set up shadow properties for the light
+        light.shadow.mapSize.width = 1024; // increase shadow map size for better quality
+        light.shadow.mapSize.height = 1024;
+        light.shadow.camera.near = 0.5;
+        light.shadow.camera.far = 1000;
+
+        // Adjust the shadow camera for better coverage
+        light.shadow.camera.left = -500;
+        light.shadow.camera.right = 500;
+        light.shadow.camera.top = 500;
+        light.shadow.camera.bottom = -500;
+
+        // Create a floor that receives shadows
+        var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 8, 8);
+        var bedgeometry = new THREE.PlaneGeometry(200, 140, 8, 8);
+        var loader = new THREE.TextureLoader();
+        var base64ImageFloor = 'https://static.vecteezy.com/system/resources/thumbnails/015/936/837/small/green-grass-texture-background-grass-garden-concept-used-for-making-green-background-football-pitch-grass-golf-green-lawn-pattern-textured-background-free-photo.jpg';
+        var base64ImageWall = 'https://media.istockphoto.com/id/515679310/vector/illustration-for-hipsters-style.jpg?s=612x612&w=0&k=20&c=mgcC1_Hz6fFyCqtagi_12td81HXTvPmC8D6JMJW1W5s='
+        var base64imageBedpng ='https://cdn.discordapp.com/attachments/806073758170611754/1251280724762431562/removal.ai_5654229f-5053-4f21-9a64-b01c65320ac3-testttt.png?ex=666e017c&is=666caffc&hm=48e4779d3ce0b12ce0caafd9bba954797cfa54779e2b1264c6844ce0e041a0f8&'
+
+        loader.load(base64ImageFloor, function (floorTexture) {
+            var floorMaterial = new THREE.MeshLambertMaterial({ map: floorTexture, side: THREE.DoubleSide });
+            floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.rotation.x = -Math.PI / 2;
+            floor.receiveShadow = true; // Floor receives shadows
+            scene.add(floor);
+        });
+
+        // Create a cube that casts shadows
+        var cubeGeometry = new THREE.BoxGeometry(100, 100, 100);
+        var base64ImageCube = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREDuhZaj-ipYZI3SBRGTWDvKJlEQZG7-vHX5Ce-bhMLQ&s';
+       
+        loader.load(base64ImageCube, function (cubeTexture) {
+            var cubeMaterial = new THREE.MeshLambertMaterial({ map: cubeTexture });
+            cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+            cube.position.set(-150, 150, 0);
+            cube.castShadow = true; // Cube casts shadows
+           
+        });
+
+        // Create a helper for the shadow camera (optional)
+        const helper = new THREE.CameraHelper(light.shadow.camera);
+
+        var wallHeight = 200; // Height of the walls
+
+        // Wall materials
+        var wallMaterial = new THREE.MeshLambertMaterial({ color: 0xcccccc });
+
+        loader.load(base64ImageWall, function(wallTexture) {
+        var wallMaterial = new THREE.MeshLambertMaterial({ map: wallTexture });
+
+        //left wall, appearing 
+        var leftWallGeometry = new THREE.PlaneGeometry(1000, wallHeight);
+        var leftWall = new THREE.Mesh(leftWallGeometry, wallMaterial);
+        leftWall.position.set(-500, wallHeight / 2, 0);
+        leftWall.rotation.y = Math.PI / 2;
+        leftWall.receiveShadow = true;
+        scene.add(leftWall);
+
+        //right wall,  appearing    
+        //var rightWallGeometry = new THREE.PlaneGeometry(1000, wallHeight);
+        //var rightWall = new THREE.Mesh(rightWallGeometry, wallMaterial);
+        //rightWall.position.set(500, wallHeight / 2, 0);
+        //rightWall.rotation.y = Math.PI / 2;
+        //rightWall.receiveShadow = true;
+        //scene.add(rightWall);
+
+        // Back wall, not appearing
+        var backWallGeometry = new THREE.PlaneGeometry(1000, wallHeight);
+        var backWall = new THREE.Mesh(backWallGeometry, wallMaterial);
+        backWall.position.set(0, wallHeight / 2, -500);
+   
+        backWall.receiveShadow = true;
+        scene.add(backWall);
+
+        // Front wall, appearing
+        //var frontWallGeometry = new THREE.PlaneGeometry(1000, wallHeight);
+        //var frontWall = new THREE.Mesh(frontWallGeometry, wallMaterial);
+        //frontWall.position.set(0, wallHeight / 2, 500);
+        //frontWall.receiveShadow = true;
+        //scene.add(frontWall);
+
+        var cube2Geometry = new THREE.BoxGeometry(100, 100, 100);  // Larger cube
+        var base64ImageCube2 = 'https://media.istockphoto.com/id/515679310/vector/illustration-for-hipsters-style.jpg?s=612x612&w=0&k=20&c=mgcC1_Hz6fFyCqtagi_12td81HXTvPmC8D6JMJW1W5s=';
+
+        loader.load(base64ImageCube2, function (cubeTexture) {
+            var materials = [
+                new THREE.MeshLambertMaterial({ map: loader.load('https://t4.ftcdn.net/jpg/03/06/17/75/360_F_306177550_0r2aahfEYDf0ppgHDajgIbBMKiMcDwU4.jpg') }),  // Right face texture
+                new THREE.MeshLambertMaterial({ map: cubeTexture }),  // Left face texture
+                new THREE.MeshLambertMaterial({ map: cubeTexture }),  // Top face texture
+                new THREE.MeshLambertMaterial({ map: cubeTexture }),  // Bottom face texture
+                new THREE.MeshLambertMaterial({ map: cubeTexture }),  // Front face texture
+                new THREE.MeshLambertMaterial({ map: cubeTexture })   // Back face texture
+            ];
+
+            cube2 = new THREE.Mesh(cube2Geometry, materials);
+            cube2.position.set(150, 255, 2);  // Position the second cube
+            cube2.castShadow = true; // Cube casts shadows
+           
+        });
+
+        if (localStorage.getItem('ratTrinketCheck')) {
+            addRat();
+        }
+        function addRat() {
+            const material = new THREE.MeshLambertMaterial({ color: 0x808080 });
+
+// Body
+const bodyGeometry = new THREE.CylinderGeometry(10, 20, 40, 12);
+const body = new THREE.Mesh(bodyGeometry, material);
+body.rotation.z = Math.PI / 2;
+body.position.y = 150;
+scene.add(body);
+
+// Head
+const headGeometry = new THREE.SphereGeometry(10, 12, 12);
+const head = new THREE.Mesh(headGeometry, material);
+head.position.set(25, 150, 0);
+scene.add(head);
+
+// Ears
+const earGeometry = new THREE.SphereGeometry(5, 12, 12);
+const ear1 = new THREE.Mesh(earGeometry, material);
+ear1.position.set(30, 160, 7);
+scene.add(ear1);
+const ear2 = new THREE.Mesh(earGeometry, material);
+ear2.position.set(30, 160, -7);
+scene.add(ear2);
+
+// Nose
+const noseGeometry = new THREE.SphereGeometry(3, 12, 12);
+const nose = new THREE.Mesh(noseGeometry, new THREE.MeshLambertMaterial({ color: 0xff0000 }));
+nose.position.set(35, 150, 0);
+scene.add(nose);
+
+// Tail
+const tailGeometry = new THREE.CylinderGeometry(2, 2, 30, 12);
+const tail = new THREE.Mesh(tailGeometry, material);
+tail.rotation.z = -Math.PI / 2;
+tail.position.set(-35, 150, 0);
+scene.add(tail);
+
+// Legs
+const leg1Geometry = new THREE.CylinderGeometry(2, 4, 15, 12);
+const leg1 = new THREE.Mesh(leg1Geometry, material);
+leg1.position.set(10, 140, 10);
+scene.add(leg1);
+const leg2 = new THREE.Mesh(leg1Geometry, material);
+leg2.position.set(10, 140, -10);
+scene.add(leg2);
+const leg3 = new THREE.Mesh(leg1Geometry, material);
+leg3.position.set(-10, 140, 10);
+scene.add(leg3);
+const leg4 = new THREE.Mesh(leg1Geometry, material);
+leg4.position.set(-10, 140, -10);
+scene.add(leg4);
+        }
+
+        if (localStorage.getItem('treeTrinketCheck')){
+             var treeGeometry = new THREE.PlaneGeometry(250, 250, 10, 10);
+         var base64Tree = 'https://png.pngtree.com/png-vector/20240208/ourmid/pngtree-green-tree-plant-forest-png-image_11716383.png'
+            loader.load(base64Tree, function (TreeTexture) {
+                var TreeMaterial = new THREE.MeshLambertMaterial({
+                    map: TreeTexture,
+                    transparent: true, // Enable transparency
+                    alphaMap: TreeTexture, // Use the same texture for alpha mapping
+                     opacity: 7,
+                    side: THREE.DoubleSide
+                });
+
+                tree = new THREE.Mesh(treeGeometry, TreeMaterial);
+                tree.position.y = 150;
+                tree.position.x = -250;
+                tree.position.z = 200;
+                tree.rotation.y = 180
+                scene.add(tree);
+            });
+          }
+
+        if (localStorage.getItem('shelfcheck')){
+         // Wardrobe material
+var wardrobeMaterial = new THREE.MeshLambertMaterial({ color: 0x56351E });
+
+
+// Left side panel
+var sideGeometry = new THREE.BoxGeometry(5, 200, 80);
+var wardrobeLeft = new THREE.Mesh(sideGeometry, wardrobeMaterial);
+wardrobeLeft.position.set(-237.5, 100, -250); // Adjusted position
+wardrobeLeft.castShadow = true;
+scene.add(wardrobeLeft);
+
+// Right side panel
+var wardrobeRight = new THREE.Mesh(sideGeometry, wardrobeMaterial);
+wardrobeRight.position.set(-162.5, 100, -250); // Adjusted position
+wardrobeRight.castShadow = true;
+scene.add(wardrobeRight);
+
+// Top panel
+var topGeometry = new THREE.BoxGeometry(80, 5, 80);
+var wardrobeTop = new THREE.Mesh(topGeometry, wardrobeMaterial);
+wardrobeTop.position.set(-200, 197.5, -250); // Adjusted position
+wardrobeTop.castShadow = true;
+scene.add(wardrobeTop);
+
+// Bottom panel
+var wardrobeBottom = new THREE.Mesh(topGeometry, wardrobeMaterial);
+wardrobeBottom.position.set(-200, 2.5, -250); // Adjusted position
+wardrobeBottom.castShadow = true;
+scene.add(wardrobeBottom);
+
+// Shelf
+var shelfGeometry = new THREE.BoxGeometry(70, 5, 70);
+var wardrobeShelf = new THREE.Mesh(shelfGeometry, wardrobeMaterial);
+wardrobeShelf.position.set(-200, 100, -250); // Adjusted position
+wardrobeShelf.castShadow = true;
+scene.add(wardrobeShelf);
+        }
+        // Check for chaircheck in local storage and add the chair if it exists
+        if (localStorage.getItem('chaircheck')) {
+            addChair();
+        }
+
+        if (localStorage.getItem('chestcheck')){
+               // Create the chest base
+        const geometryBase = new THREE.BoxGeometry(100, 40, 50); // Halved dimensions
+        const materialBase = new THREE.MeshBasicMaterial({ color: 0x8B4513 });
+        const base = new THREE.Mesh(geometryBase, materialBase);
+        base.position.set(75, 50, -100); // Adjusted position
+        scene.add(base);
+
+        // Create the bottom of the chest
+        const geometryBottom = new THREE.BoxGeometry(100, 2.5, 50); // Halved dimensions
+        const materialBottom = new THREE.MeshBasicMaterial({ color: 0x000000 });
+        const bottom = new THREE.Mesh(geometryBottom, materialBottom);
+        bottom.position.set(75, 70, -100); // Adjusted position
+        scene.add(bottom);
+
+        // Create the chest lid
+        const geometryLid = new THREE.BoxGeometry(95, 10, 70); // Halved dimensions
+        const materialLid = new THREE.MeshBasicMaterial({ color: 0x8B4513 });
+        const lid = new THREE.Mesh(geometryLid, materialLid);
+        lid.position.set(75, 85, -135); // Adjusted position
+        lid.rotation.x = Math.PI / 3; // Rotate the lid to make the chest appear open
+        scene.add(lid);
+        
+        // Create the lock
+        const lockGeometry = new THREE.CylinderGeometry(5, 5, 5, 12); // Adjusted dimensions
+        const lockMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+        const lock = new THREE.Mesh(lockGeometry, lockMaterial);
+        lock.position.set(90, 85, -45); // Position the lock on the lid
+        lock.rotation.x = Math.PI / 2; // Rotate the lock to stand upright
+        scene.add(lock);
+
+
+        function onMouseClick(event) {
+            // Calculate mouse position in normalized device coordinates
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            // Update the raycaster with the camera and mouse position
+            raycaster.setFromCamera(mouse, camera);
+
+            // Calculate objects intersected by the ray
+            const intersects = raycaster.intersectObjects(scene.children);
+
+            // Check if the cube or torus was clicked
+            for (let i = 0; i < intersects.length; i++) {
+               
+                 if (intersects[i].object === bottom) {
+                    onChestClick();
+                }
+            }
+        }
+        window.addEventListener('click', onMouseClick, false);
+
+        }
+
+        if (localStorage.getItem('computercheck')){
+              // Create CPU (base)
+          const cpuGeometry = new THREE.BoxGeometry(125, 75, 75); // Halved dimensions
+        const cpuMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+        const cpu = new THREE.Mesh(cpuGeometry, cpuMaterial);
+        cpu.position.set(300, 37.5, 0); // Adjusted position
+        scene.add(cpu);
+
+        // Create screen
+        const screenGeometry = new THREE.BoxGeometry(100, 62.5, 2.5); // Halved dimensions
+        const screenMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+        const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+        screen.position.set(300, 50, 37.5); // Adjusted position
+        scene.add(screen);
+
+        // Create keyboard
+        const keyboardGeometry = new THREE.BoxGeometry(125, 5, 50); // Halved dimensions
+        const keyboardMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+        const keyboard = new THREE.Mesh(keyboardGeometry, keyboardMaterial);
+        keyboard.position.set(300, 0, 50); // Adjusted position
+        scene.add(keyboard);
+
+        function onMouseClick(event) {
+            // Calculate mouse position in normalized device coordinates
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            // Update the raycaster with the camera and mouse position
+            raycaster.setFromCamera(mouse, camera);
+
+            // Calculate objects intersected by the ray
+            const intersects = raycaster.intersectObjects(scene.children);
+
+            // Check if the cube or torus was clicked
+            for (let i = 0; i < intersects.length; i++) {
+                
+                  if (intersects[i].object === cpu) {
+                    onPCClick();
+                }
+            }
+        }
+        window.addEventListener('click', onMouseClick, false);
+        }
+
+        if (localStorage.getItem('tablecheck')) {
+            const tableGroup = new THREE.Group();
+    
+    // Tabletop
+    const tabletopGeometry = new THREE.BoxGeometry(100, 5, 50);
+    const tabletopMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+    const tabletop = new THREE.Mesh(tabletopGeometry, tabletopMaterial);
+    tabletop.position.set(80, 25, 0);
+    tabletop.castShadow = true;
+    tableGroup.add(tabletop);
+
+    // Table legs
+    const legGeometry = new THREE.BoxGeometry(5, 25, 5);
+    const legMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+
+    const frontLeftLeg = new THREE.Mesh(legGeometry, legMaterial);
+    frontLeftLeg.position.set(35, 12.5, -20);
+    frontLeftLeg.castShadow = true;
+    tableGroup.add(frontLeftLeg);
+
+    const frontRightLeg = new THREE.Mesh(legGeometry, legMaterial);
+    frontRightLeg.position.set(125, 12.5, -20);
+    frontRightLeg.castShadow = true;
+    tableGroup.add(frontRightLeg);
+
+    const backLeftLeg = new THREE.Mesh(legGeometry, legMaterial);
+    backLeftLeg.position.set(35, 12.5, 20);
+    backLeftLeg.castShadow = true;
+    tableGroup.add(backLeftLeg);
+
+    const backRightLeg = new THREE.Mesh(legGeometry, legMaterial);
+    backRightLeg.position.set(125, 12.5, 20);
+    backRightLeg.castShadow = true;
+    tableGroup.add(backRightLeg);
+
+    scene.add(tableGroup);
+        }
+        // Function to add a chair
+        function addChair() {
+            // Create a simple chair
+            var chairMaterial = new THREE.MeshLambertMaterial({ color: 0x56351E });
+            
+            // Seat
+            var seatGeometry = new THREE.BoxGeometry(80, 10, 80); // smaller seat
+            var seat = new THREE.Mesh(seatGeometry, chairMaterial);
+            seat.position.set(0, 70, 0);
+            seat.castShadow = true;
+            scene.add(seat);
+
+            // Backrest
+            var backrestGeometry = new THREE.BoxGeometry(10, 60, 80); // narrower backrest
+            var backrest = new THREE.Mesh(backrestGeometry, chairMaterial);
+            backrest.position.set(40, 95, 0);
+            backrest.castShadow = true;
+            scene.add(backrest);
+
+            // Legs
+            var legGeometry = new THREE.BoxGeometry(10, 40, 10);
+            var frontLeftLeg = new THREE.Mesh(legGeometry, chairMaterial);
+            frontLeftLeg.position.set(-30, 45, -30);
+            frontLeftLeg.castShadow = true;
+            scene.add(frontLeftLeg);
+
+            var frontRightLeg = new THREE.Mesh(legGeometry, chairMaterial);
+            frontRightLeg.position.set(30, 45, -30);
+            frontRightLeg.castShadow = true;
+            scene.add(frontRightLeg);
+
+            var backLeftLeg = new THREE.Mesh(legGeometry, chairMaterial);
+            backLeftLeg.position.set(-30, 45, 30);
+            backLeftLeg.castShadow = true;
+            scene.add(backLeftLeg);
+
+            var backRightLeg = new THREE.Mesh(legGeometry, chairMaterial);
+            backRightLeg.position.set(30, 45, 30);
+            backRightLeg.castShadow = true;
+            scene.add(backRightLeg);
+        }
+
+        
+        
+       
+
+
+        
+
+
+    });
+if (localStorage.getItem('bedcheck')){
+ // Bed parts
+ const bedMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+
+// Mattress (half size)
+const mattressGeometry = new THREE.BoxGeometry(100, 10, 50);
+const mattress = new THREE.Mesh(mattressGeometry, bedMaterial);
+mattress.position.set(-100, 60, 50);
+scene.add(mattress);
+
+// Bed legs (half size)
+const legsGeometry = new THREE.BoxGeometry(5, 25, 5); // Renamed to legsGeometry
+
+const legs1 = new THREE.Mesh(legsGeometry, bedMaterial);
+legs1.position.set(-147.5, 42.5, 27.5);
+scene.add(legs1);
+
+const legs2 = new THREE.Mesh(legsGeometry, bedMaterial);
+legs2.position.set(-52.5, 42.5, 27.5);
+scene.add(legs2);
+
+const legs3 = new THREE.Mesh(legsGeometry, bedMaterial);
+legs3.position.set(-147.5, 42.5, 72.5);
+scene.add(legs3);
+
+const legs4 = new THREE.Mesh(legsGeometry, bedMaterial);
+legs4.position.set(-52.5, 42.5, 72.5);
+scene.add(legs4);
+
+// Bedsheet (half size)
+const bedsheetMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+const bedsheetGeometry = new THREE.BoxGeometry(100, 1, 50);
+const bedsheet = new THREE.Mesh(bedsheetGeometry, bedsheetMaterial);
+bedsheet.position.set(-100, 66, 50);
+scene.add(bedsheet);
+
+// Pillow (half size)
+const pillowMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+const pillowGeometry = new THREE.BoxGeometry(50, 5, 12.5);
+const pillow = new THREE.Mesh(pillowGeometry, pillowMaterial);
+pillow.position.set(-137.5, 70.5, 50);
+pillow.rotation.y = Math.PI / 2;
+scene.add(pillow);
+
+function onMouseClick(event) {
+            // Calculate mouse position in normalized device coordinates
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            // Update the raycaster with the camera and mouse position
+            raycaster.setFromCamera(mouse, camera);
+
+            // Calculate objects intersected by the ray
+            const intersects = raycaster.intersectObjects(scene.children);
+
+            // Check if the cube or torus was clicked
+            for (let i = 0; i < intersects.length; i++) {
+                if (intersects[i].object === bedsheet) {
+                    onBedClick();
+                } 
+                
+            }
+        }
+        window.addEventListener('click', onMouseClick, false);
+}
+ 
+
+
+    var energyElement = document.getElementById('energypoints');
+var energy = parseInt(energyElement.textContent);
+const savedEnergy = localStorage.getItem('energy1');
+        if (savedEnergy) {
+            energyElement.innerText = savedEnergy;
+            energy = parseInt(savedEnergy);
+        }
+        function onBedClick() {
+            if (localStorage.getItem('alreadysleptcheck')) {
+            alert('You dont feel like going back to bed.');
+            return;
+        }
+           let additionalEnergy = Math.floor(Math.random()*6)+3;
+           energy += additionalEnergy;
+           localStorage.setItem('energy1', energy);
+           alert('You regained ' + additionalEnergy + ' energy! Your total energy is now ' + energy + '.');
+           localStorage.setItem('alreadysleptcheck', 'true');
+        }
+        function onPCClick() {
+            localStorage.setItem('donutOScheck', 'true');
+            window.location.href='DonutOS.html';
+        }
+        function onChestClick() {
+            
+            window.location.href='inventory.html';
+        }
+
+      
+        
+
+        animate();
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        if (cube) {
+            cube.rotation.y += 0.01;
+            cube.rotation.z += 0.01;
+        }
+
+       
+
+        renderer.render(scene, camera);
+    }
+
+    document.addEventListener('keydown', function(event) {
+        switch (event.key) {
+            case 'w':
+            case 'W':
+                camera.position.z -= 8;
+                break;
+            case 's':
+            case 'S':
+                camera.position.z += 8;
+                break;
+            case 'a':
+            case 'A':
+                camera.position.x -= 8;
+                break;
+            case 'd':
+            case 'D':
+                camera.position.x += 8;
+                break;
+            case 'e':
+            case 'E':
+                camera.position.y += 8;
+                break;
+            case 'q':
+            case 'Q':
+                camera.position.y -= 8;
+                break;
+            case 'ArrowLeft':
+                camera.rotation.y += 0.05;  // Rotate camera left
+                break;
+            case 'ArrowRight':
+                camera.rotation.y -= 0.05;  // Rotate camera right
+                break;
+            case 'ArrowUp':
+                camera.rotation.x += 0.05;  // Rotate camera up
+                break;
+            case 'ArrowDown':
+                camera.rotation.x -= 0.05;  // Rotate camera down
+                break;
+        }
+
+        renderer.render(scene, camera);
+    });
+
+    init();
+
+    document.addEventListener('keydown', function(event) {
+    if (event.key === 'H' || event.key === 'h') {
+        window.location.href = 'map.html';
+    }
+});
+</script>
+</html>

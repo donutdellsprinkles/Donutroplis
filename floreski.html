@@ -1,0 +1,267 @@
+<html>
+<head>
+    <title>Floreski</title>
+    <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
+</head>
+<body>
+    <div id="center">
+        <button id="back" onclick="window.location.href='gamehub.html';">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+        </button>
+        <p id="pointsfr">300</p>
+        <button id="dice">Start: 300 sprinkles</button>
+        <div id="die1"></div>
+        <div id="die2"></div>
+        <p id="result">Value Range:</p>
+        <p id="randomnumber">Random Number:</p>
+        <button class="cards" id="card1">
+            <img style="width: 100%;" src="https://lh3.googleusercontent.com/pw/AP1GczPLnUb9VSXbQUZb4Z4h3Fqnz1PFAtXmdZo-H3utAEj8ifcDtUyFLQ-Ir_qfMIqRTokOUhGcGPzezxuAuzuqhkCPBp-ZlF1JVycOLZmBc6q0NkzPk5l_=w2400">
+        </button>
+        <button class="cards" id="card2">
+            <img style="width: 100%;" src="https://lh3.googleusercontent.com/pw/AP1GczPLnUb9VSXbQUZb4Z4h3Fqnz1PFAtXmdZo-H3utAEj8ifcDtUyFLQ-Ir_qfMIqRTokOUhGcGPzezxuAuzuqhkCPBp-ZlF1JVycOLZmBc6q0NkzPk5l_=w2400">
+        </button>
+        <button class="cards" id="card3">
+            <img style="width: 100%;" src="https://lh3.googleusercontent.com/pw/AP1GczPLnUb9VSXbQUZb4Z4h3Fqnz1PFAtXmdZo-H3utAEj8ifcDtUyFLQ-Ir_qfMIqRTokOUhGcGPzezxuAuzuqhkCPBp-ZlF1JVycOLZmBc6q0NkzPk5l_=w2400">
+        </button>
+        <button class="cards" id="card4">
+            <img style="width: 100%;" src="https://lh3.googleusercontent.com/pw/AP1GczPLnUb9VSXbQUZb4Z4h3Fqnz1PFAtXmdZo-H3utAEj8ifcDtUyFLQ-Ir_qfMIqRTokOUhGcGPzezxuAuzuqhkCPBp-ZlF1JVycOLZmBc6q0NkzPk5l_=w2400">
+        </button>
+        <p id="playervalue">Player Value: 4</p>
+        <button id="submit">Submit</button>
+        <p id="points">Points: 0</p>
+    </div>
+</body>
+<style>
+     #back {
+        width: 30px;
+        height: 30px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        left: 0;
+        top: 0;
+     
+    }
+    #points {
+        display: none;
+    }
+    body {
+        background-color: #EAC9DC;
+    }
+    p {
+        font-family: comic;
+        font-size: 30px;
+        color: #F239C1;
+    }
+    @keyframes colorChange {
+        0% { color: #FFD700; }
+        25% { color: #FF6B00; }
+        50% { color: #0038A8; }
+        75% { color: #FF0000; }
+        100% { color: #00BFFF; }
+    }
+    #pointsfr {
+        font-family: Simp;
+        animation: colorChange 2s linear infinite;
+        font-size: 30px;
+        text-align: center;
+    }
+    @font-face {
+        font-family: Simp;
+        src: url(simpson.otf);
+    }
+    @font-face {
+        font-family: comic;
+        src: url(comic.otf);
+    }
+    button {
+        border: none;
+        cursor: pointer;
+        background-color: #69306D;
+        color: #F2D7EE;
+        width: 250px;
+        height: 50px;
+        font-family: comic;
+        font-size: 30px;
+        font-weight: bolder;
+        border-radius: 10px;
+    }
+</style>
+<script>
+document.getElementById('dice').addEventListener('click', rollDice);
+document.getElementById('submit').addEventListener('click', submitScore);
+
+const cards = document.querySelectorAll('.cards');
+let playerValue = 4;
+let randomValue;
+let valueRange;
+
+function rollDice() {
+    if (points >= 300) {
+        points -= 300;
+        pointsElement.innerText = points;
+        localStorage.setItem('points1', points.toString());
+        const dice1 = Math.floor(Math.random() * 6) + 1;
+        const dice2 = Math.floor(Math.random() * 6) + 1;
+
+        const result = dice1 * dice2;
+        document.getElementById('result').innerText = `Value Range: ${result}`;
+        valueRange = result;
+
+        const randomvalue = Math.floor(Math.random() * (result + 1));
+        document.getElementById('randomnumber').innerText = `Random Number: ${randomvalue}`;
+        randomValue = randomvalue;
+
+        document.getElementById('dice').style.display = 'none';
+
+        playerValue = 4;
+        document.getElementById('playervalue').innerText = `Player Value: ${playerValue}`;
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => handleCardClick(card));
+            card.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                handleCardRightClick(card);
+            });
+            card.addEventListener('auxclick', (e) => {
+                if (e.button === 1) {
+                    handleCardMiddleClick(card);
+                }
+            });
+        });
+    } else {
+        alert('Not enough sprinkles');
+    }
+}
+
+function handleCardClick(card) {
+    if (card.classList.contains('locked')) return;
+
+    card.style.transform = 'rotateY(180deg)';
+    card.classList.add('selected');
+
+    const value = parseInt(prompt('Enter a value between -10 and -5'), 10);
+    if (!isNaN(value) && value >= -10 && value <= -5) {
+        playerValue += value;
+        playerValue = Math.max(playerValue, -2);
+        document.getElementById('playervalue').innerText = `Player Value: ${playerValue}`;
+
+        card.classList.add('locked');
+        card.style.cursor = 'not-allowed';
+
+        card.querySelector('img').src = 'https://lh3.googleusercontent.com/pw/AP1GczNyADMHjScOybieE8wHRj5jzmc7r0KMVDlWqvAJ1zUWuJYeGXNgfWE0fujywVQ_WNBHktw2nNElRV6gkVZuojWpZcbEXeFqzQLlsDewoSOUCbX-X2aJ=w2400';
+
+        card.classList.remove('selected'); 
+    }
+}
+
+function handleCardRightClick(card) {
+    if (card.classList.contains('locked')) return;
+
+    card.classList.add('locked');
+    card.querySelector('img').src = 'https://lh3.googleusercontent.com/pw/AP1GczO9opXfV5WfGzOrJqhaidi-h8XHWRm_akAny88n9opCnCrz-gAqfZwnlvxCQPh0iswHpoFG17mzD0WvwWbboBimuTvh3mEr418GwC-g7Jhy1_gxo0C2=w2400';
+    card.style.cursor = 'not-allowed';
+
+    valueRange += 25;
+    document.getElementById('result').innerText = `Value Range: ${valueRange}`;
+    
+    const randomvalue = Math.floor(Math.random() * (valueRange + 1));
+    document.getElementById('randomnumber').innerText = `Random Number: ${randomvalue}`;
+    randomValue = randomvalue;
+}
+
+function handleCardMiddleClick(card) {
+    if (card.classList.contains('locked')) return;
+
+    const value = parseInt(prompt('Enter a value between +4 and +8'), 10);
+    if (!isNaN(value) && value >= 4 && value <= 8) {
+        playerValue += value;
+        playerValue = Math.max(playerValue, -2);
+        document.getElementById('playervalue').innerText = `Player Value: ${playerValue}`;
+
+        card.classList.add('locked');
+        card.style.cursor = 'not-allowed';
+
+        card.querySelector('img').src = 'https://lh3.googleusercontent.com/pw/AP1GczNyADMHjScOybieE8wHRj5jzmc7r0KMVDlWqvAJ1zUWuJYeGXNgfWE0fujywVQ_WNBHktw2nNElRV6gkVZuojWpZcbEXeFqzQLlsDewoSOUCbX-X2aJ=w2400';
+    }
+}
+
+function submitScore() {
+    cards.forEach(card => {
+        if (!card.classList.contains('locked')) {
+            playerValue += 5;
+            card.classList.add('locked');
+            card.style.cursor = 'not-allowed';
+            card.querySelector('img').src = 'https://lh3.googleusercontent.com/pw/AP1GczNyADMHjScOybieE8wHRj5jzmc7r0KMVDlWqvAJ1zUWuJYeGXNgfWE0fujywVQ_WNBHktw2nNElRV6gkVZuojWpZcbEXeFqzQLlsDewoSOUCbX-X2aJ=w2400';
+        }
+    });
+
+    document.getElementById('playervalue').innerText = `Player Value: ${playerValue}`;
+
+    const pointsAdded = calculatePoints(playerValue, randomValue);
+    points += pointsAdded;
+    pointsElement.innerText = points;
+    localStorage.setItem('points1', points.toString());
+
+    document.getElementById('points').innerText = `Points: ${points}`;
+    document.getElementById('dice').style.display = 'block';
+
+    resetCards(); // Reset the cards for the next round
+}
+
+function resetCards() {
+    cards.forEach(card => {
+        card.classList.remove('locked');
+        card.style.cursor = 'pointer';
+        card.querySelector('img').src = 'https://lh3.googleusercontent.com/pw/AP1GczPLnUb9VSXbQUZb4Z4h3Fqnz1PFAtXmdZo-H3utAEj8ifcDtUyFLQ-Ir_qfMIqRTokOUhGcGPzezxuAuzuqhkCPBp-ZlF1JVycOLZmBc6q0NkzPk5l_=w2400';
+    });
+}
+
+var pointsElement = document.getElementById('pointsfr');
+var points = parseInt(pointsElement.textContent);
+
+function loadPoints() {
+    const savedPoints = localStorage.getItem('points1');
+    if (savedPoints) {
+        pointsElement.innerText = savedPoints;
+        points = parseInt(savedPoints);
+    }
+}
+
+loadPoints();
+
+function calculatePoints(playerValue, randomValue) {
+    const difference = Math.abs(playerValue - randomValue);
+    let pointsToAdd = 0;
+
+    if (difference === 0) {
+        pointsToAdd = 600; //win biggggg
+    } else if (difference <= 2) {
+        pointsToAdd = 300; //add back their input value
+    } else if (difference <= 5) {
+        pointsToAdd = 0; //don't do anything lmfao
+    } else {
+        pointsToAdd = -300; //feeling evil might delete later
+    }
+
+    return pointsToAdd;
+}
+</script>
+
+<style>
+    .locked {
+        cursor: not-allowed;
+    }
+    #dice {
+        display: block;
+    }
+    .cards {
+        border: none;
+        background-color: transparent;
+        width: 200px;
+        height: auto;
+        cursor: pointer;
+    }
+</style>
+</html>

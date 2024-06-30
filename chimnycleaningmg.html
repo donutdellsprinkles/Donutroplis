@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleaning Game</title>
+    <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
+    <style>
+        @font-face {
+            font-family: Simp;
+            src: url(simpson.otf);
+        }
+        @font-face {
+            font-family: comic;
+            src: url(comic.otf);
+        }
+        @keyframes colorChange {
+            0% { color: #FFD700; }
+            25% { color: #FF6B00; }
+            50% { color: #0038A8; }
+            75% { color: #FF0000; }
+            100% { color: #00BFFF; }
+        }
+        #points {
+            font-family: Simp;
+            animation: colorChange 2s linear infinite;
+            font-size: 30px;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #FFB17A;
+            margin: 0;
+        }
+        #game {
+            text-align: center;
+            background: #FFB17A;
+            padding: 20px;
+            border-radius: 10px;
+            position: relative;
+            width: 80vw;
+            height: 80vh;
+            color: #FCE762;
+            font-family: comic;
+            font-size: 30px;
+            font-weight: bolder;
+        }
+        .button {
+            position: absolute;
+            padding: 10px;
+            background-color: #F1D302;
+            color: #FDFFFC;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #message {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <h1>Clean the Screen!</h1>
+        <p>Click all the buttons within 4 seconds</p>
+        <p id="points">300</p>
+        <div id="buttons-container"></div>
+        <p id="message">Game will start soon...</p>
+        <p id="score"></p>
+    </div>
+
+    <script>
+        var pointsElement = document.getElementById('points');
+        var baseLevelElement = document.getElementById('basepoints');
+        var points = parseInt(pointsElement.textContent);
+
+        function loadPoints() {
+            const savedPoints = localStorage.getItem('points1');
+            if (savedPoints) {
+                pointsElement.innerText = savedPoints;
+                points = parseInt(savedPoints);
+            }
+        }
+
+        loadPoints();
+
+        const gameContainer = document.getElementById('game');
+        const buttonsContainer = document.getElementById('buttons-container');
+        const message = document.getElementById('message');
+        const scoreElement = document.getElementById('score');
+        let score = 0;
+        let timer;
+        let gameEnded = false;
+        let buttonsClicked = 0;
+
+        function createButton(id) {
+            const button = document.createElement('button');
+            button.classList.add('button');
+            button.textContent = 'Click me';
+            button.style.top = `${Math.random() * 70 + 10}%`;
+            button.style.left = `${Math.random() * 70 + 10}%`;
+            button.addEventListener('click', () => {
+                if (!gameEnded) {
+                    button.style.visibility = 'hidden';
+                    buttonsClicked++;
+                }
+            });
+            buttonsContainer.appendChild(button);
+        }
+
+        function startGame() {
+            message.textContent = "Get ready...";
+            scoreElement.textContent = '';
+            buttonsContainer.innerHTML = '';
+            buttonsClicked = 0;
+            gameEnded = false;
+
+            setTimeout(() => {
+                message.textContent = "Go!";
+                for (let i = 0; i < 10; i++) {
+                    createButton(i);
+                }
+
+                timer = setTimeout(() => {
+                    endGame();
+                }, 4000);
+            }, 2000);
+        }
+
+        function endGame() {
+            gameEnded = true;
+            buttonsContainer.innerHTML = '';
+            if (buttonsClicked === 10) {
+                score = 3;
+                message.textContent = "Perfect cleaning!";
+                points += 600;
+            } else if (buttonsClicked >= 6) {
+                score = 2;
+                message.textContent = "Good cleaning!";
+                points += 200;
+            } else if (buttonsClicked >= 3) {
+                score = 1;
+                message.textContent = "Needs more cleaning!";
+            } else {
+                score = 0;
+                message.textContent = "Not clean enough!";
+            }
+
+            scoreElement.textContent = `Your score: ${score}`;
+            points += 1200;
+            pointsElement.innerText = points;
+            localStorage.setItem('points1', points);
+
+            setTimeout(backtowork, 4000); //go back home after 4 seconds
+        }
+
+        startGame();
+
+        function backtowork() {
+            window.location.href = 'work.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baking Minigame</title>
+    <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
+    <style>
+         #back {
+        width: 30px;
+        height: 30px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        left: 0;
+        top: 0;
+     
+    }
+        p, h1 {
+           color: #E6EBE0;
+           font-weight: bold;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #EFE9AE;
+        }
+        #game {
+            text-align: center;
+            background: #FF928B;
+            padding: 20px;
+            border-radius: 10px;
+          
+        }
+        #button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #CDEAC0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #button:disabled {
+            background-color: #FFAC81;
+            cursor: not-allowed;
+        }
+        @font-face {
+            font-family: Simp;
+            src: url(simpson.otf);
+        }
+        @font-face {
+            font-family: comic;
+            src: url(comic.otf);
+        }
+        @keyframes colorChange {
+            0% { color: #FFD700; }
+            25% { color: #FF6B00; }
+            50% { color: #0038A8; }
+            75% { color: #FF0000; }
+            100% { color: #00BFFF; }
+        }
+        #points {
+            font-family: Simp;
+            animation: colorChange 2s linear infinite;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <button id="back" onclick="window.location.href='gamehub.html';">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+    </button>
+    <div id="game">
+        <h1>Remove from Oven on Time!</h1>
+        <p id="points">300</p>
+        <button id="button" disabled>Press Me</button>
+        <p id="message">Game will start soon...</p>
+        <p id="score"></p>
+    </div>
+
+    <script>
+
+var pointsElement = document.getElementById('points');
+        var baseLevelElement = document.getElementById('basepoints');
+        var points = parseInt(pointsElement.textContent);
+
+        function loadPoints() {
+            const savedPoints = localStorage.getItem('points1');
+            if (savedPoints) {
+                pointsElement.innerText = savedPoints;
+                points = parseInt(savedPoints);
+            }
+        }
+
+        loadPoints();
+
+        const button = document.getElementById('button');
+        const message = document.getElementById('message');
+        const scoreElement = document.getElementById('score');
+        let startTime;
+        let timer;
+        let gameEnded = false;
+
+        function startGame() {
+            message.textContent = "Get ready...";
+            button.disabled = true;
+            gameEnded = false;
+
+            setTimeout(() => {
+                message.textContent = "Go!";
+                button.disabled = false;
+                startTime = Date.now();
+
+                timer = setTimeout(() => {
+                    endGame();
+                }, 5000);
+            }, 2000);
+        }
+
+        function endGame() {
+            gameEnded = true;
+            button.disabled = true;
+            const elapsedTime = (Date.now() - startTime) / 1000;
+            let score = 0;
+
+            if (elapsedTime >= 5) {
+                message.textContent = "Time's up!";
+            } else if (Math.abs(elapsedTime - 5) < 0.1) {
+                score = 3;
+                points += 500;
+                message.textContent = "Perfect timing!";
+            } else if (Math.abs(elapsedTime - 5) <= 2) {
+                score = 2;
+                points += 250;
+                message.textContent = "Good timing!";
+            } else {
+                message.textContent = "Too early or too late!";
+            }
+
+            scoreElement.textContent = `Your score: ${score}`;
+          
+            pointsElement.innerText = points;
+            localStorage.setItem('points1', points);
+            setTimeout(startGame, 4000); //go back home after 4 seconds
+        }
+
+        button.addEventListener('click', () => {
+            if (gameEnded) return;
+
+            clearTimeout(timer);
+            endGame();
+        });
+
+        startGame();
+       
+    </script>
+</body>
+</html>
