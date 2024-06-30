@@ -25,12 +25,15 @@
             <img style="width: 50%;" src="bagel.png">
             <p>Bagel</p>  
         </div>
-        <div class="item" id="goldengloves">
+        <div class="item" id="gloves">
             <img style="width: 50%;" src="TEMPgloves2.png">
             <p>Golden Gloves</p>
         </div>
     </body>
     <style>
+        #gloves {
+            display: none;
+        }
         #Bagel {
             display: none;
         }
@@ -80,6 +83,9 @@
     }
     if (localStorage.getItem('BagelTrinketCheck')){
         document.getElementById('Bagel').style.display = 'block';
+    }
+    if (localStorage.getItem('goldenglovescheck')){
+        document.getElementById('gloves').style.display = 'block';
     }
     document.addEventListener('keydown', function(event) {
     if (event.key === 'H' || event.key === 'h') {
