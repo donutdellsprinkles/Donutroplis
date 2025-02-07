@@ -4,53 +4,169 @@
         <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
     </head>
     <body>
+        <div id="sticky">
+            <button onclick="window.location.href='map.html'">Play</button>
+            <button onclick="window.location.href='museum.html'">Blog</button>
+            <button onclick="window.location.href='about.html'">About</button>
+        </div>
+
         <div id="sawtooth-container">
             <h1>
                 Donutroplis
             </h1>
         
         </div>
-        <h2>What is Donutroplis?</h2>
         
-        <p>Welcome to Donutropolis, an engaging online world where you can:
-            <br><br>
-            • Work and Trade: Earn and trade Sprinkles with other players.
-            <br><br>
-            • Build Your Home: Design, customize, and upgrade your home.
-            <br><br>
-            • Play Mini-Games: Enjoy a variety of exclusive mini-games.
-            <br><br>
-             • Join the Community: Connect with other players on <a href="https://discord.gg/BYSJp2P8B6">Discord</a>
-            <br><br>
-            All of this is available for free and from the comfort of your browser! Expect regular updates that add much more content as the community grows. Jump into Donutropolis today!
-        </p>
-       <h2>Press H!</h2>
-</body>
-<style>
-   
-    button {
-    background-color: transparent;
-    cursor: pointer;
-    outline: none;
-    border-radius: 10px;
-    height: 150px;
-    width: 400px;
-    font-size: 75px;
-    font-family: simp;
-    color: #3b0944;
-    text-shadow: 2px 2px #97cba9;
-    background-color: #fafafa;
-    border: none;
-    
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    
+            <h2>What Are We</h2>
+            <div id="container">
+            <p>Explore an entire world surronding one theme, Donuts! Earn sprinkles through a ton of different ways such as trading or working
+                and buy different items with them. <br> Improve your own apartment in donutroplis and add more to it through different jobs and 
+                the specialized shop of Donutroplis. <br> Try out many unique mini games, decorate your home and most importantly show off your unique items!
+                <br><br>
+                Expect a splurge of updates over time which will add much more content and items growing out Donutroplis to become the troplis its meant to be!
+                <br><br>
+                Interact with the community through the gallery where you can post art and participate in different events in the museum!
+                <br><br>
+                You can join our discord server and interact with the community here <a href="https://discord.gg/BYSJp2P8B6"><img style="width:3%;" src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/discord-white-icon.png"></a>
+            </p>
+        </div>
+        <div id="container2">
+            <button id="hover"><img style="width: 70px;" src="https://em-content.zobj.net/thumbs/60/microsoft/54/doughnut_1f369.png"></button>
+        </div>
+        
+        <div id="card1"></div>
+        <div id="card2"></div>
+        <div id="card3"></div>
+
+
+       
+    </body>
+       
+    <style>
+         button {
+            border-radius: 5px;
+            width: 30%;
+            border: none;
+            cursor: pointer;
+            height: 70px;
+            font-family: comic;
+            font-size: 20px;
+            color: #171A21;
+        }
+        #sticky {
+            position: fixed;
+            background-color: transparent;
+            border-radius: 10px;
+            top: 10px;
+            width: 230px;
+            margin: 20px;
+        }
+        #container2 {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 15px;
+        }
+          #hover {
+        
+            
+        transition: box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
+        background-color: transparent;
+        border: none;
+        border-radius: 700px;
+        cursor: pointer;
+    }
+    #hover:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+  transform: translateY(-2px); 
+    }
+         #card1 {
+        background-image: url('https://i.pinimg.com/236x/6d/5e/ce/6d5ece4113233b31a28450a1d92bec3d.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 450px;
+        width: 250px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        position: absolute;
+        left: 0; 
+        right: 0; 
+        margin-left: auto; 
+        margin-right: auto; 
+        
+        transition: transform 800ms cubic-bezier(.05,.43,.25,.95);
+    }
+    #card2 {
+        background-image: url('https://w0.peakpx.com/wallpaper/499/314/HD-wallpaper-donuts-candy-doughnuts-pink-yummy.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 450px;
+        width: 250px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        position: absolute;
+        left: 0; 
+        right: 0; 
+        margin-left: auto; 
+        margin-right: auto; 
+       
+        transition: transform 800ms cubic-bezier(.05,.43,.25,.95);
+       
+    }
+    #card3 {
+        background-image: url('https://wallpapers.com/images/hd/pastel-phone-colored-donuts-qntl80cqjm8pdpxs.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 450px;
+        width: 250px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        position: absolute;
+        left: 0; 
+        right: 0; 
+        margin-left: auto; 
+        margin-right: auto; 
+        
+        transition: transform 800ms cubic-bezier(.05,.43,.25,.95);
+        
+    }
+    #card1:hover {
+        transform: translateX(100%) rotate(4deg);
+        
+    }
+    #card2:hover {
+        transform: translateX(-100%) rotate(-4deg); 
+    }
+      #container {
+        background-color: #5D9CFD;
+        margin: 20px;
+        border-radius: 10px;
+      }
+        h2 {
+color: #F88379;
+font-family: 'Simp';
+font-size: 110px;
+text-shadow: 4px 3px 0px #FEE698, 9px 8px 0px rgba(0,0,0,0.15);
+text-align: center;
 }
-    p {
-        color: #FEE698;
+        #sawtooth-container {
+width: 100%;
+height: 60%;
+background-color: #FAFADC;
+clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 95% 85%, 90% 80%, 85% 85%, 80% 80%, 75% 85%, 70% 80%, 65% 85%, 60% 80%, 55% 85%, 50% 80%, 45% 85%, 40% 80%, 35% 85%, 30% 80%, 25% 85%, 20% 80%, 15% 85%, 10% 80%, 5% 85%, 0% 80%);
+display: flex;
+justify-content: center;
+align-items: center;
+color: white;
+font-size: 20px;
+transition: height 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+p {
+        color:  #FAF7F2;
         font-family: 'comic';
-        font-size: 50px;
+        font-size: 40px;
         font-weight: bolder;
-        text-shadow: 4px 3px 0px #F88379;
+        text-shadow: 4px  #F88379;
         
     }
     @font-face {
@@ -67,56 +183,34 @@ body {
 background-color: #FDB15D;
 margin: 0;
 }
+
 h1 {
 color: #F88379;
 font-family: 'Simp';
 font-size: 220px;
 text-shadow: 4px 3px 0px #FEE698, 9px 8px 0px rgba(0,0,0,0.15);
 position: absolute;
-left: 0;
-}
-h2 {
-color: #F88379;
-font-family: 'Simp';
-font-size: 110px;
-text-shadow: 4px 3px 0px #FEE698, 9px 8px 0px rgba(0,0,0,0.15);
 text-align: center;
 }
-button {
-background-image: url("https://tenor.com/bFKUy.gif");
-width: 400px;
-height: 150px;
-background-color: transparent;
-border: none;
+    </style>
 
-}
-#middle {
-position: absolute;
-cursor: pointer;
+    <script>
+    const button = document.getElementById("hover");
 
-}
-#sawtooth-container {
-width: 100%;
-height: 90%;
-background-color: #FAFADC;
-clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 95% 85%, 90% 80%, 85% 85%, 80% 80%, 75% 85%, 70% 80%, 65% 85%, 60% 80%, 55% 85%, 50% 80%, 45% 85%, 40% 80%, 35% 85%, 30% 80%, 25% 85%, 20% 80%, 15% 85%, 10% 80%, 5% 85%, 0% 80%);
-display: flex;
-justify-content: center;
-align-items: center;
-color: white;
-font-size: 20px;
-transition: height 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-
-
-</style>
-<script>
-      document.addEventListener('keydown', function(event) {
-    if (event.key === 'H' || event.key === 'h') {
-        window.location.href = 'map.html';
+    // Function to be executed when the mouse hovers over the button
+    function handleHover() {
+       document.getElementById('card1').style.transform = "translateX(-100%) rotate(-4deg)";
+       document.getElementById('card2').style.transform = "translateX(+100%) rotate(+4deg)";
+       document.getElementById('card3').style.transform = 'translateY(-1.5rem)';
     }
-});
-</script>
+    function resetTransform() {
+        card1.style.transform = "none";
+        card2.style.transform = "none";
+        card3.style.transform = "none";
+    }
+    // Event listener for mouse hover
+    button.addEventListener("mouseenter", handleHover);
+    button.addEventListener("mouseleave", resetTransform);
+    </script>
 </html>
 
