@@ -132,11 +132,11 @@ var pointsElement = document.getElementById('points');
                 message.textContent = "Time's up!";
             } else if (Math.abs(elapsedTime - 5) < 0.1) {
                 score = 3;
-                points += 500;
+                points += 50;
                 message.textContent = "Perfect timing!";
             } else if (Math.abs(elapsedTime - 5) <= 2) {
                 score = 2;
-                points += 250;
+                points += 25;
                 message.textContent = "Good timing!";
             } else {
                 message.textContent = "Too early or too late!";
