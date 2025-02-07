@@ -5,6 +5,9 @@
     <link rel="icon" type="image/x-icon" href="https://em-content.zobj.net/thumbs/120/twitter/348/doughnut_1f369.png">
 </head>
 <body>
+    <button id="back" onclick="window.location.href='map.html';">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+    </button>
     <!--Add one or two final jobs, increase their base level a bit, and add more trinkets and stuff to each one-->
     <dialog id="merchant">
         <div id="shop">
@@ -14,7 +17,7 @@
             <p class="merchant">Energy:</p>
             <p id="energypoints" class="merchant">8</p>
             <p class="merchant">Base Level:</p>
-            <p class="merchant" id="basepoints">1</p>
+            <p class="merchant" id="basepoints">2</p>
             <button class="purchase" id="dogwalker">Dog Walker: 300 sprinkles, 1 Energy (Base Level 1) </button>
             <br><br>
             <button class="purchase" id="ChimneyCleaner">ChimneyCleaner: 1200-1800 sprinkles, 2 Energy (Base Level 2) </button>
@@ -39,6 +42,17 @@
     </dialog>
 </body>
 <style>
+       #back {
+        width: 30px;
+        height: 30px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        left: 0;
+        top: 0;
+     
+    }
     #catalog {
         border: none;
         width: 700px;
@@ -148,7 +162,7 @@
         var floorGeometry = new THREE.PlaneGeometry(2000, 2000, 8, 8);
         var loader = new THREE.TextureLoader();
         var base64ImageFloor = 'https://static.vecteezy.com/system/resources/previews/015/486/823/non_2x/cute-aesthetics-distorted-pastel-purple-and-yellow-checkerboard-gingham-plaid-checkered-tartan-wallpaper-illustration-perfect-for-banner-backdrop-postcard-background-wallpaper-vector.jpg';
-        var base64ImageWall = 'https://cdn.dribbble.com/users/9373130/screenshots/16600567/media/f7fd15605f9cdf5b4450453bdfe07677.jpg?resize=400x300&vertical=center';
+        var base64ImageWall = 'https://t3.ftcdn.net/jpg/06/86/52/44/360_F_686524491_xKccLSSJAPfzQ8gLMJ5R3dSIt4RHGiPU.jpg';
         loader.load(base64ImageFloor, function (floorTexture) {
             var floorMaterial = new THREE.MeshLambertMaterial({ map: floorTexture, side: THREE.DoubleSide });
             floor = new THREE.Mesh(floorGeometry, floorMaterial);
@@ -333,7 +347,7 @@
         } else {
             points += 300;
             energy -= 1;
-
+            alert("You walked the dog... more like the dog walked you (you still did a good job though)")
             pointsElement.innerText = points;
             energyElement.innerText = energy;
 
@@ -350,7 +364,7 @@
         } else {
             
             energy -= 2;
-
+            
             pointsElement.innerText = points;
             energyElement.innerText = energy;
 
@@ -417,7 +431,7 @@
     } else {
         points += 800;
         energy -= 1;
-
+        alert('"Yo, can I get a philly steak the donut way" was not what you expected to hear at work but you still managed to cook it up')
         pointsElement.innerText = points;
         energyElement.innerText = energy;
 
@@ -441,7 +455,7 @@ document.getElementById('gardener').addEventListener('click', function() {
     } else {
         points += 2700;
         energy -= 1;
-
+        alert('Staring at plants all day made you feel a bit more with nature, so you took a dump in one the garden beds. Lets hope your boss doesnt notice the different smell')
         pointsElement.innerText = points;
         energyElement.innerText = energy;
 
